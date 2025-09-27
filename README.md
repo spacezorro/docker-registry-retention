@@ -46,7 +46,7 @@ docker run --rm \
   -e DOCKER_USERNAME=admin \
   -e DOCKER_PASSWORD=hunter2 \
   -e NOF_TAGS_TO_KEEP=6 \
-  yournamehere/docker-registry-retention:latest
+  ghcr.io/spacezorro/docker-registry-retention:latest
 ```
 ---
 
