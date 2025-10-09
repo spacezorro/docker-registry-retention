@@ -1,3 +1,5 @@
+LABEL org.opencontainers.image.source=https://github.com/spacezorro/docker-registry-retention
+
 FROM registry:2 AS registry-stage
 
 FROM python:3.11-slim-bullseye
