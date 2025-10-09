@@ -75,7 +75,7 @@ If you delete tags (with this) and don't delete blobs (with garbage collection) 
 ```bash
 docker run --rm --cpus=0.2 \
   -e NOF_TAGS_TO_KEEP=2 \
-  -v /data/my-docker-registry/:/var/lib/registry
+  -v /data/my-docker-registry/:/var/lib/registry \
   ghcr.io/spacezorro/docker-registry-retention:latest
 ```
 
