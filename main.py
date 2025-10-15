@@ -130,7 +130,7 @@ for image in catalog:
         try:
             r = requests.get(manifest_url, auth=auth, headers=headers)
             if r.status_code == 404:
-                log.info(f"Tag {image}:{tag} listed but missing manifest")
+                log.debug(f"Tag {image}:{tag} listed but missing manifest")
                 #tag_info_cache[key] = { "digest": None, "created": None, "cached_at": datetime.now(UTC).isoformat() }
                 continue
             r.raise_for_status()
@@ -222,13 +222,13 @@ for image in catalog:
 
     # Dry-run summary
     if dry_run:
-        print(f"\n[DRY RUN] Image: {image}")
-        print("  Tags to keep:")
+        log.info(f"[DRY RUN] Image: {image}")
+        log.info("  Tags to keep:")
         for tag, _, created in tags_to_keep:
-            print(f"    {tag} (created {created.isoformat()})")
-        print("  Tags to delete:")
+            log.info(f"    {tag} (created {created.isoformat()})")
+        log.info("  Tags to delete:")
         for tag, _, created in tags_to_delete:
-            print(f"    {tag} (created {created.isoformat()})")
+            log.info(f"    {tag} (created {created.isoformat()})")
         stats[image] = len(tags_to_delete)
         continue
 
