@@ -40,6 +40,7 @@ The `docker-registry-retention` tool helps manage Docker Registry storage by rem
 | `DOCKER_USERNAME`     | Username for registry basic auth (optional; skips auth if omitted).         | -                       |
 | `DOCKER_PASSWORD`     | Password for registry basic auth (optional).                                | -                       |
 | `DRY_RUN`             | If `true`, logs tags that would be deleted without performing deletions.    | `false`                 |
+| `LOG_LEVEL`           | Set to `DEBUG`, `INFO`, `WARNING`, `ERROR`, or `CRITICAL`                   | `INFO`                  |
 
 ---
 

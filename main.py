@@ -15,7 +15,15 @@ CACHE_EXPIRY_DAYS = 14  # base expiry window
 SAVE_INTERVAL = 20  # save cache every N tags processed
 
 # Logging setup
-logging.basicConfig(level=logging.DEBUG)
+valid_log_levels = {"DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"}
+log_level = os.getenv("LOG_LEVEL", "INFO").upper()
+
+# Sanity check for log level
+if log_level not in valid_log_levels:
+    log_level = "INFO"  # Fallback to INFO if invalid
+    print(f"Invalid LOG_LEVEL '{log_level}' provided. Defaulting to INFO.")
+
+logging.basicConfig(level=getattr(logging, log_level))
 log = logging.getLogger(__name__)
 
 # Environment variables
