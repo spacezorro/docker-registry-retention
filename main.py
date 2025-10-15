@@ -6,6 +6,7 @@ import logging
 import pickle
 import requests
 import random
+from collections import defaultdict
 from requests.auth import HTTPBasicAuth
 from datetime import datetime, timedelta, timezone
 UTC = timezone.utc
@@ -32,6 +33,7 @@ username = os.getenv("DOCKER_USERNAME")
 password = os.getenv("DOCKER_PASSWORD")
 nof_tags_to_keep = int(os.getenv("NOF_TAGS_TO_KEEP", 3))
 dry_run = os.getenv("DRY_RUN", "false").lower() == "true"
+group_tags = os.getenv("GROUP_TAGS", "true").lower() == "true"
 
 if not registry_url:
     log.error("Registry URL not found. Please set REGISTRY_URL env variable.")
@@ -101,9 +103,10 @@ for image in catalog:
     tag_dates = []
 
     for tag in tags:
-        if tag == "latest":
-            log.info(f"Skipping {image}:{tag} (latest tag)")
-            continue
+        if not group_tags:
+            if tag == "latest":
+                log.info(f"Skipping {image}:{tag} (latest tag)")
+                continue
 
         key = (image, tag)
 
@@ -191,10 +194,31 @@ for image in catalog:
                 log.warning(f"Failed to save tag cache during run: {e}")
             tags_processed_since_save = 0
 
-    # Sort by creation date (oldest first)
-    tag_dates.sort(key=lambda x: x[2])
-    tags_to_delete = tag_dates[:-nof_tags_to_keep]
-    tags_to_keep = tag_dates[-nof_tags_to_keep:]
+    if group_tags:
+        # Group tags by creation date
+        tag_groups = defaultdict(list)
+        for tag, digest, created_dt in tag_dates:
+            timestamp = created_dt.replace(second=0,microsecond=0).isoformat()
+            tag_groups[timestamp].append((tag, digest, created_dt))
+
+        # Sort groups by timestamp
+        sorted_groups = sorted(tag_groups.items(), key=lambda x: datetime.fromisoformat(x[0]), reverse=True)
+
+        # Select tags to keep
+        tags_to_keep = []
+        tags_to_delete = []
+        for i, (timestamp, group_tags) in enumerate(sorted_groups):
+            if i < nof_tags_to_keep:
+                tags_to_keep.extend(group_tags)
+                log.info(f"KEEP   Timestamp: {timestamp}, Tags: {[tag for tag, _, _ in group_tags]}")
+            else:
+                tags_to_delete.extend(group_tags)
+                log.info(f"DELETE Timestamp: {timestamp}, Tags: {[tag for tag, _, _ in group_tags]}")
+    else:
+        # Sort by creation date
+        tag_dates.sort(key=lambda x: x[2])
+        tags_to_delete = tag_dates[:-nof_tags_to_keep]
+        tags_to_keep = tag_dates[-nof_tags_to_keep:]
 
     # Dry-run summary
     if dry_run:
