@@ -55,29 +55,29 @@ If you volume mount a local registry it starts a local registry server, deletes 
 ### Grouping Tags
 
 Given 4 images:
-Image 1: built on 10/08/2025 with tags :latest, :251008, :master, and :abc123
-Image 2: built on 10/07/2025 with tags :251007 and :def456
-Image 3: built on 09/26/2025 with tags :250926 and :ghi789
-Image 4: built on 09/20/2025 with tags :250920 and :jkl012
+- Image 1: built on 10/08/2025 with tags :latest, :251008, :master, and :abc123
+- Image 2: built on 10/07/2025 with tags :251007 and :def456
+- Image 3: built on 09/26/2025 with tags :250926 and :ghi789
+- Image 4: built on 09/20/2025 with tags :250920 and :jkl012
 
 If you set `GROUP_TAGS`=true it will combine tags by the image build date. Combined with `NOF_TAGS_TO_KEEP`=2 this would:
-Keep Tags: ['latest', '251008', 'master', 'abc123']
-Keep Tags: ['251007', 'def456']
-Delete Tags: ['250926', 'ghi789']
-Delete Tags: ['250920', 'jkl012']
+- Keep Tags: ['latest', '251008', 'master', 'abc123']
+- Keep Tags: ['251007', 'def456']
+- Delete Tags: ['250926', 'ghi789']
+- Delete Tags: ['250920', 'jkl012']
 
 If you set `GROUP_TAGS`=false it will sort tags by the image build date. Combined with `NOF_TAGS_TO_KEEP`=4 this would:
-Keep Tags: (latest is kept automagically)
-    '251008'
-    'master'
-    'abc123'
-    '251007'
-Delete Tags:
-    'def456'
-    '250926'
-    'ghi789'
-    '250920'
-    'jkl012'
+- Keep Tags: (latest is kept automagically)
+  - '251008'
+  - 'master'
+  - 'abc123'
+  - '251007'
+- Delete Tags:
+  - 'def456'
+  - '250926'
+  - 'ghi789'
+  - '250920'
+  - 'jkl012'
 
 ---
 
