@@ -134,7 +134,7 @@ This is where the cache file actually becomes useful
   registry-clean:
     image: ghcr.io/spacezorro/docker-registry-retention:latest
     volumes:
-      /data/my-docker-registry/:/var/lib/registry
+      - /data/my-docker-registry/:/var/lib/registry
     environment:
       - NOF_TAGS_TO_KEEP=2
       - GROUP_TAGS=true
