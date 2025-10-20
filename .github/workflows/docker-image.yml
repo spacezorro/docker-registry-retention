@@ -43,7 +43,7 @@ jobs:
             type=raw,value=latest
             type=ref,event=branch
             type=sha,prefix=,format=short
-            type=raw,pattern={{date 'YYMMDD'}}
+            type=raw,value={{date 'YYMMDD'}}
 
       - name: Build and push my version
         if: github.event_name == 'push'
