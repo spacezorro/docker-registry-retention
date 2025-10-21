@@ -138,7 +138,7 @@ This is where the cache file actually becomes useful
     environment:
       - NOF_TAGS_TO_KEEP=2
       - GROUP_TAGS=true
-    entrypoint: >
+    entrypoint: |
       /bin/bash -c '
         while /entrypoint.sh; do
           echo "[INFO] Sleeping until tomorrow..."
